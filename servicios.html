@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - Zapatos Ortopédicos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="top-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Ipiales - Calle 10 No. 10-74 Barrio Palermo</span>
+                </div>
+                <div class="weather">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span id="weather-info">Ipiales - Clima templado</span>
+                </div>
+                <div class="datetime">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-datetime"></span>
+                </div>
+                <div class="whatsapp">
+                    <a href="https://wa.me/573164218091" target="_blank" class="whatsapp-button">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Zapatos Ortopédicos</h1>
+                <p>Calzado especializado para tu bienestar</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html" class="active">Servicios</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Productos Section -->
+    <section class="productos">
+        <div class="container">
+            <h2>Nuestros Productos</h2>
+            <div class="productos-grid">
+                <!-- Producto 1 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Azul</h3>
+                        <p>Zapato ortopédico para niños con soporte de arco y material transpirable.</p>
+                        <div class="producto-precio">$120.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Azul')">Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Rosa</h3>
+                        <p>Zapato ortopédico para niñas con diseño suave y ajuste perfecto.</p>
+                        <div class="producto-precio">$130.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Rosa')">Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Verde</h3>
+                        <p>Zapato ortopédico unisex con suela antideslizante y material resistente.</p>
+                        <div class="producto-precio">$125.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Verde')">Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Negro</h3>
+                        <p>Zapato ortopédico elegante con soporte especial para el talón.</p>
+                        <div class="producto-precio">$135.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Negro')">Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Producto 5 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Blanco</h3>
+                        <p>Zapato ortopédico clásico con diseño minimalista y máxima comodidad.</p>
+                        <div class="producto-precio">$140.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Blanco')">Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Producto 6 -->
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico infantil">
+                    <div class="producto-info">
+                        <h3>Zapato Ortopédico Infantil Rojo</h3>
+                        <p>Zapato ortopédico deportivo con diseño moderno y máxima flexibilidad.</p>
+                        <div class="producto-precio">$145.000</div>
+                        <button class="producto-button" onclick="openWhatsApp('Zapato Ortopédico Infantil Rojo')">Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Zapatos Ortopédicos</h3>
+                    <p>Tu bienestar es nuestra prioridad</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Horario</h3>
+                    <p>Lunes a Viernes: 9:00 - 18:00</p>
+                    <p>Sábado: 9:00 - 14:00</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zapatos Ortopédicos. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('current-datetime').textContent = now.toLocaleDateString('es-ES', options);
+        }
+
+        // Initialize and update
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // WhatsApp function
+        function openWhatsApp(producto) {
+            const mensaje = `Hola, estoy interesado en el producto: ${producto}`;
+            const url = `https://wa.me/573164218091?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html> 

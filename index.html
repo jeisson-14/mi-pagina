@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapatos Ortopédicos - Calzado Especializado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="top-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Ipiales - Calle 10 No. 10-74 Barrio Palermo</span>
+                </div>
+                <div class="weather">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span id="weather-info">Cargando clima...</span>
+                </div>
+                <div class="datetime">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-datetime"></span>
+                </div>
+                <div class="whatsapp">
+                    <a href="https://wa.me/573164218091" target="_blank" class="whatsapp-button">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Zapatos Ortopédicos</h1>
+                <p>Calzado especializado para tu bienestar</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Calzado Ortopédico para Bebés</h2>
+                <p>Encuentra el calzado perfecto para tu bebé</p>
+                <a href="#productos" class="cta-button">Realizar pedidos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categorías Section -->
+    <section id="categorias" class="categorias">
+        <div class="container">
+            <h2>Nuestras Categorías</h2>
+            <div class="categorias-grid">
+                <div class="categoria-card" onclick="openModal('modal-ninos')">
+                    <i class="fas fa-baby"></i>
+                    <h3>Zapatos para Niños</h3>
+                    <p>Calzado ortopédico especializado para bebés varones.</p>
+                </div>
+                <div class="categoria-card">
+                    <i class="fas fa-baby"></i>
+                    <h3>Zapatos para Niñas</h3>
+                    <p>Calzado ortopédico especializado para bebés niñas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Zapatos para Niños -->
+    <div id="modal-ninos" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('modal-ninos')">&times;</span>
+            <h2>Zapatos Ortopédicos para Niños</h2>
+            <div class="modal-grid">
+                <div class="modal-image">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zapato ortopédico para niño">
+                </div>
+                <div class="modal-info">
+                    <h3>Características Principales</h3>
+                    <ul>
+                        <li>Soporte de arco especialmente diseñado</li>
+                        <li>Material suave y transpirable</li>
+                        <li>Ajuste perfecto con velcro</li>
+                        <li>Suela antideslizante</li>
+                    </ul>
+                    <h3>Beneficios</h3>
+                    <ul>
+                        <li>Mejora la postura</li>
+                        <li>Previene problemas de desarrollo</li>
+                        <li>Máxima comodidad</li>
+                        <li>Durabilidad garantizada</li>
+                    </ul>
+                    <div class="modal-cta">
+                        <a href="#contacto" class="cta-button" onclick="closeModal('modal-ninos')">Consultar Disponibilidad</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos Section -->
+    <section id="productos" class="productos">
+        <div class="container">
+            <h2>Nuestros Productos</h2>
+            <div class="productos-grid">
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapato ortopédico 1">
+                    <h3>Zapato Ortopédico Básico Niño</h3>
+                    <p class="descripcion">Zapato ortopédico con soporte de arco y material transpirable.</p>
+                    <p class="precio">$89.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Básico Niño" data-precio="89.99" data-imagen="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 2">
+                    <h3>Zapato Ortopédico Premium Niño</h3>
+                    <p class="descripcion">Zapato de alta calidad con suela antideslizante y ajuste perfecto.</p>
+                    <p class="precio">$129.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Premium Niño" data-precio="129.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 3">
+                    <h3>Zapato Ortopédico Deportivo Niño</h3>
+                    <p class="descripcion">Ideal para actividades físicas con máximo soporte.</p>
+                    <p class="precio">$99.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Deportivo Niño" data-precio="99.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a" alt="Zapato ortopédico 4">
+                    <h3>Zapato Ortopédico Casual Niño</h3>
+                    <p class="descripcion">Combinación perfecta de estilo y comodidad.</p>
+                    <p class="precio">$79.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Casual Niño" data-precio="79.99" data-imagen="https://images.unsplash.com/photo-1560343090-f0409e92791a">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Zapato ortopédico 5">
+                    <h3>Zapato Ortopédico Formal Niño</h3>
+                    <p class="descripcion">Elegancia y soporte para ocasiones especiales.</p>
+                    <p class="precio">$119.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Formal Niño" data-precio="119.99" data-imagen="https://images.unsplash.com/photo-1560769629-975ec94e6a86">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 6">
+                    <h3>Zapato Ortopédico Básico Niña</h3>
+                    <p class="descripcion">Diseño suave y cómodo para el día a día.</p>
+                    <p class="precio">$89.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Básico Niña" data-precio="89.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 7">
+                    <h3>Zapato Ortopédico Premium Niña</h3>
+                    <p class="descripcion">Alta calidad con detalles especiales.</p>
+                    <p class="precio">$129.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Premium Niña" data-precio="129.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a" alt="Zapato ortopédico 8">
+                    <h3>Zapato Ortopédico Deportivo Niña</h3>
+                    <p class="descripcion">Perfecto para actividades físicas.</p>
+                    <p class="precio">$99.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Deportivo Niña" data-precio="99.99" data-imagen="https://images.unsplash.com/photo-1560343090-f0409e92791a">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Zapato ortopédico 9">
+                    <h3>Zapato Ortopédico Casual Niña</h3>
+                    <p class="descripcion">Estilo y comodidad para el día a día.</p>
+                    <p class="precio">$79.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Casual Niña" data-precio="79.99" data-imagen="https://images.unsplash.com/photo-1560769629-975ec94e6a86">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapato ortopédico 10">
+                    <h3>Zapato Ortopédico Formal Niña</h3>
+                    <p class="descripcion">Elegancia y soporte para ocasiones especiales.</p>
+                    <p class="precio">$119.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Formal Niña" data-precio="119.99" data-imagen="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 11">
+                    <h3>Zapato Ortopédico Sandalia Niño</h3>
+                    <p class="descripcion">Ideal para el verano con soporte especial.</p>
+                    <p class="precio">$69.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Sandalia Niño" data-precio="69.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 12">
+                    <h3>Zapato Ortopédico Sandalia Niña</h3>
+                    <p class="descripcion">Comodidad y estilo para el verano.</p>
+                    <p class="precio">$69.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Sandalia Niña" data-precio="69.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a" alt="Zapato ortopédico 13">
+                    <h3>Zapato Ortopédico Botín Niño</h3>
+                    <p class="descripcion">Protección adicional con estilo.</p>
+                    <p class="precio">$109.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Botín Niño" data-precio="109.99" data-imagen="https://images.unsplash.com/photo-1560343090-f0409e92791a">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Zapato ortopédico 14">
+                    <h3>Zapato Ortopédico Botín Niña</h3>
+                    <p class="descripcion">Elegancia y soporte en cada paso.</p>
+                    <p class="precio">$109.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Botín Niña" data-precio="109.99" data-imagen="https://images.unsplash.com/photo-1560769629-975ec94e6a86">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapato ortopédico 15">
+                    <h3>Zapato Ortopédico Tenis Niño</h3>
+                    <p class="descripcion">Deportivo y cómodo para actividades diarias.</p>
+                    <p class="precio">$94.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Tenis Niño" data-precio="94.99" data-imagen="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 16">
+                    <h3>Zapato Ortopédico Tenis Niña</h3>
+                    <p class="descripcion">Estilo deportivo con soporte especial.</p>
+                    <p class="precio">$94.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Tenis Niña" data-precio="94.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 17">
+                    <h3>Zapato Ortopédico Mocasín Niño</h3>
+                    <p class="descripcion">Casual y cómodo para el día a día.</p>
+                    <p class="precio">$84.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Mocasín Niño" data-precio="84.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a" alt="Zapato ortopédico 18">
+                    <h3>Zapato Ortopédico Mocasín Niña</h3>
+                    <p class="descripcion">Elegancia casual con soporte especial.</p>
+                    <p class="precio">$84.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Mocasín Niña" data-precio="84.99" data-imagen="https://images.unsplash.com/photo-1560343090-f0409e92791a">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86" alt="Zapato ortopédico 19">
+                    <h3>Zapato Ortopédico Bota Niño</h3>
+                    <p class="descripcion">Protección y soporte para climas fríos.</p>
+                    <p class="precio">$139.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Bota Niño" data-precio="139.99" data-imagen="https://images.unsplash.com/photo-1560769629-975ec94e6a86">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+                <div class="producto-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapato ortopédico 20">
+                    <h3>Zapato Ortopédico Bota Niña</h3>
+                    <p class="descripcion">Estilo y protección para climas fríos.</p>
+                    <p class="precio">$139.99</p>
+                    <select class="size-select">
+                        <option value="17">Talla 17</option>
+                        <option value="18">Talla 18</option>
+                        <option value="19">Talla 19</option>
+                        <option value="20">Talla 20</option>
+                        <option value="serie">Serie Completa (17-20)</option>
+                    </select>
+                    <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Bota Niña" data-precio="139.99" data-imagen="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
+                        <i class="fas fa-cart-plus"></i> Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Section -->
+    <section id="contacto" class="contacto">
+        <div class="container">
+            <h2>Contáctanos</h2>
+            <div class="contacto-grid">
+                <div class="contacto-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Dirección: Calle Principal #123</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <p>Teléfono: (123) 456-7890</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>Email: info@zapatosortopedicos.com</p>
+                    </div>
+                </div>
+                <form class="contacto-form">
+                    <input type="text" placeholder="Nombre" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="tel" placeholder="Teléfono">
+                    <textarea placeholder="Mensaje" required></textarea>
+                    <button type="submit" class="submit-button">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Zapatos Ortopédicos</h3>
+                    <p>Tu bienestar es nuestra prioridad</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Horario</h3>
+                    <p>Lunes a Viernes: 9:00 - 18:00</p>
+                    <p>Sábado: 9:00 - 14:00</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zapatos Ortopédicos. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Button -->
+    <div class="cart-button" onclick="openModal('cart-modal')">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count">0</span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('cart-modal')">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <div id="cart-items">
+                <!-- Cart items will be added here dynamically -->
+            </div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cart-total-amount">0.00</span></h3>
+            </div>
+            <div class="cart-actions">
+                <button class="clear-cart" onclick="clearCart()">Vaciar Carrito</button>
+                <button class="send-order" onclick="sendOrderToWhatsApp()">Enviar Pedido por WhatsApp</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
