@@ -44,27 +44,57 @@ body {
 
 .logo h1 {
     margin: 0;
-    font-size: 2rem;
-    color: var(--color-primary);
+    font-size: 2.5rem;
+    color: var(--color-dark);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
-.logo h1 i {
-    font-size: 1.8rem;
+.logo h1 i:first-of-type {
+    font-size: 2.2rem;
+    color: #87ceeb;
     transform: rotate(-15deg);
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    animation: floatLeft 3s ease-in-out infinite;
 }
 
 .logo h1 i:last-of-type {
+    font-size: 2.2rem;
+    color: #ff69b4;
     transform: rotate(15deg);
-    margin-left: -10px;
+    margin-left: -5px;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    animation: floatRight 3s ease-in-out infinite;
+}
+
+@keyframes floatLeft {
+    0%, 100% {
+        transform: rotate(-15deg) translateY(0);
+    }
+    50% {
+        transform: rotate(-15deg) translateY(-5px);
+    }
+}
+
+@keyframes floatRight {
+    0%, 100% {
+        transform: rotate(15deg) translateY(0);
+    }
+    50% {
+        transform: rotate(15deg) translateY(-5px);
+    }
 }
 
 .logo p {
     margin: 5px 0 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--color-text);
+    font-weight: 500;
 }
 
 .main-nav ul {
@@ -86,7 +116,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1619646176605-b7417fb53b1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1514989940723-e8e51635b782?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -399,6 +429,14 @@ body {
     .hero p {
         font-size: 1rem;
     }
+
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .logo h1 i {
+        font-size: 1.8rem;
+    }
 }
 
 /* Modal Styles */
@@ -564,6 +602,25 @@ body {
     color: #333;
 }
 
+.categoria-productos {
+    margin-bottom: 4rem;
+}
+
+.categoria-titulo {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.categoria-titulo i {
+    font-size: 2.5rem;
+}
+
 .productos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -619,6 +676,14 @@ body {
     .productos-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
+    }
+    
+    .categoria-titulo {
+        font-size: 1.5rem;
+    }
+    
+    .categoria-titulo i {
+        font-size: 2rem;
     }
 }
 
