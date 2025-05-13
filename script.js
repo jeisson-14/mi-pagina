@@ -234,7 +234,7 @@ window.sendOrderToWhatsApp = function() {
         return;
     }
     
-    const phoneNumber = '573164218091'; // Your WhatsApp number
+    const phoneNumber = '573105822406'; // Your WhatsApp number
     let message = '¡Nuevo pedido!\n\n';
     
     // Obtenemos la URL actual y nos aseguramos de que sea accesible
