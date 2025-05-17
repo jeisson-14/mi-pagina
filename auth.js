@@ -103,6 +103,7 @@ function handleAddProduct(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         const product = {
+            id: Date.now(), // Agregar ID único
             name: document.getElementById('product-name').value,
             category: document.getElementById('product-category').value,
             description: document.getElementById('product-description').value,
@@ -176,7 +177,7 @@ function loadProducts() {
         const productCard = document.createElement('div');
         productCard.className = 'producto-card';
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
             <h3>${product.name}</h3>
             <p class="descripcion">${product.description}</p>
             <p class="precio">${formatPrice(product.price)}</p>
@@ -236,7 +237,7 @@ function showCategoryProducts(category) {
         const productCard = document.createElement('div');
         productCard.className = 'producto-card';
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
             <h3>${product.name}</h3>
             <p class="descripcion">${product.description}</p>
             <p class="precio">${formatPrice(product.price)}</p>
