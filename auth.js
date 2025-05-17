@@ -142,16 +142,20 @@ function handleAddProduct(event) {
 
 // Load products for admin view
 function loadProducts() {
+    console.log('Loading products...');
     const products = JSON.parse(localStorage.getItem('products') || '[]');
+    console.log('Products from localStorage:', products);
     const adminGrid = document.getElementById('admin-products-grid');
     adminGrid.innerHTML = '';
 
     if (products.length === 0) {
+        console.log('No products found');
         adminGrid.innerHTML = '<p class="no-products">No hay productos disponibles. ¡Agrega tu primer producto!</p>';
         return;
     }
 
     products.forEach((product, index) => {
+        console.log('Creating product card for:', product.name);
         const productCard = document.createElement('div');
         productCard.className = 'producto-card';
         productCard.innerHTML = `
@@ -176,17 +180,24 @@ function loadProducts() {
 
 // Show products by category
 function showCategoryProducts(category) {
+    console.log('Showing products for category:', category);
     const products = JSON.parse(localStorage.getItem('products') || '[]');
+    console.log('All products:', products);
     const categoryProducts = products.filter(product => product.category === category);
+    console.log('Filtered products for category:', categoryProducts);
+    
     const productsGrid = document.querySelector(`.categoria-productos:has(h3:contains('${category === 'ninos' ? 'Niños' : 'Niñas'}')) .productos-grid`);
+    console.log('Products grid element:', productsGrid);
     
     // Clear and populate grid
     productsGrid.innerHTML = '';
     
     if (categoryProducts.length === 0) {
+        console.log('No products found for category');
         productsGrid.innerHTML = '<p class="no-products">No hay productos disponibles en esta categoría.</p>';
     } else {
         categoryProducts.forEach(product => {
+            console.log('Creating product card for:', product.name);
             const productCard = document.createElement('div');
             productCard.className = 'producto-card';
             productCard.innerHTML = `
