@@ -111,6 +111,8 @@ function handleAddProduct(event) {
             sizes: Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value)
         };
 
+        console.log('New product to add:', product);
+
         // Validate sizes
         if (product.sizes.length === 0) {
             alert('Por favor seleccione al menos una talla');
@@ -126,18 +128,33 @@ function handleAddProduct(event) {
         const products = JSON.parse(localStorage.getItem('products') || '[]');
         products.push(product);
         localStorage.setItem('products', JSON.stringify(products));
+        console.log('Products saved to localStorage:', products);
 
         // Reset form and reload products
         event.target.reset();
         document.getElementById('image-preview').innerHTML = '';
         document.getElementById('add-product-form').style.display = 'none';
+        
+        // Recargar productos en todas las vistas
         loadProducts();
+        showCategoryProducts('ninos');
+        showCategoryProducts('ninas');
         
         // Show success message
         alert('Producto agregado exitosamente');
     };
 
     reader.readAsDataURL(imageFile);
+}
+
+// Función para formatear precios con puntos
+function formatPrice(price) {
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(price);
 }
 
 // Load products for admin view
@@ -162,7 +179,7 @@ function loadProducts() {
             <img src="${product.image}" alt="${product.name}">
             <h3>${product.name}</h3>
             <p class="descripcion">${product.description}</p>
-            <p class="precio">$${product.price}</p>
+            <p class="precio">${formatPrice(product.price)}</p>
             <p class="categoria">Categoría: ${product.category === 'ninos' ? 'Niños' : 'Niñas'}</p>
             <p class="tallas">Tallas: ${product.sizes.includes('serie') ? 'Serie Completa (17-20)' : product.sizes.join(', ')}</p>
             <div class="admin-actions">
@@ -186,40 +203,67 @@ function showCategoryProducts(category) {
     const categoryProducts = products.filter(product => product.category === category);
     console.log('Filtered products for category:', categoryProducts);
     
-    const productsGrid = document.querySelector(`.categoria-productos:has(h3:contains('${category === 'ninos' ? 'Niños' : 'Niñas'}')) .productos-grid`);
+    // Encontrar el contenedor correcto para la categoría
+    const categoryTitle = category === 'ninos' ? 'Niños' : 'Niñas';
+    const categoriaProductos = document.querySelectorAll('.categoria-productos');
+    let productsGrid = null;
+    
+    categoriaProductos.forEach(container => {
+        const title = container.querySelector('h3');
+        if (title && title.textContent.includes(categoryTitle)) {
+            productsGrid = container.querySelector('.productos-grid');
+        }
+    });
+    
     console.log('Products grid element:', productsGrid);
     
-    // Clear and populate grid
+    if (!productsGrid) {
+        console.error('No se encontró el contenedor de productos para la categoría:', category);
+        return;
+    }
+    
+    // Limpiar y poblar el grid
     productsGrid.innerHTML = '';
     
     if (categoryProducts.length === 0) {
         console.log('No products found for category');
         productsGrid.innerHTML = '<p class="no-products">No hay productos disponibles en esta categoría.</p>';
-    } else {
-        categoryProducts.forEach(product => {
-            console.log('Creating product card for:', product.name);
-            const productCard = document.createElement('div');
-            productCard.className = 'producto-card';
-            productCard.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p class="descripcion">${product.description}</p>
-                <p class="precio">$${product.price}</p>
-                <select class="size-select">
-                    ${product.sizes.includes('serie') 
-                        ? '<option value="serie">Serie Completa (17-20)</option>' 
-                        : product.sizes.map(size => `<option value="${size}">Talla ${size}</option>`).join('')}
-                </select>
-                <button type="button" class="add-to-cart" data-producto="${product.name}" data-precio="${product.price}" data-imagen="${product.image}">
-                    <i class="fas fa-cart-plus"></i> Agregar al carrito
-                </button>
-            `;
-            productsGrid.appendChild(productCard);
-        });
+        return;
     }
-    
-    // Scroll to the category section
-    productsGrid.closest('.categoria-productos').scrollIntoView({ behavior: 'smooth' });
+
+    categoryProducts.forEach(product => {
+        console.log('Creating product card for:', product.name);
+        const productCard = document.createElement('div');
+        productCard.className = 'producto-card';
+        productCard.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p class="descripcion">${product.description}</p>
+            <p class="precio">${formatPrice(product.price)}</p>
+            <div class="tallas-disponibles">
+                <h4>Tallas Disponibles:</h4>
+                <div class="tallas-grid">
+                    ${['17', '18', '19', '20'].map(size => `
+                        <label class="talla-option">
+                            <input type="checkbox" name="talla-${product.name}" value="${size}">
+                            <span>${size}</span>
+                        </label>
+                    `).join('')}
+                    <label class="talla-option serie-completa">
+                        <input type="checkbox" name="talla-${product.name}" value="serie">
+                        <span>Serie Completa</span>
+                    </label>
+                </div>
+            </div>
+            <button type="button" class="add-to-cart" onclick="addToCart(this)" 
+                data-producto="${product.name}" 
+                data-precio="${product.price}" 
+                data-imagen="${product.image}">
+                <i class="fas fa-cart-plus"></i> Agregar al carrito
+            </button>
+        `;
+        productsGrid.appendChild(productCard);
+    });
 }
 
 // Edit product
@@ -342,12 +386,20 @@ function updateHeroSection(settings) {
 
 // Load hero settings on page load
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
+    
     const heroSettings = JSON.parse(localStorage.getItem('heroSettings') || '{}');
     if (Object.keys(heroSettings).length > 0) {
         updateHeroSection(heroSettings);
     }
+    
     updateLoginButton();
-    // Load products for both categories
+    
+    // Cargar productos para ambas categorías
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    console.log('Products loaded on page load:', products);
+    
+    // Siempre intentar mostrar los productos, incluso si no hay ninguno
     showCategoryProducts('ninos');
     showCategoryProducts('ninas');
 }); 

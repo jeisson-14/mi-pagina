@@ -133,31 +133,40 @@ function addToCart(button) {
     const precio = parseFloat(button.dataset.precio);
     const imagen = button.dataset.imagen;
     
-    // Get selected size
-    const sizeSelect = button.parentElement.querySelector('.size-select');
-    const talla = sizeSelect ? sizeSelect.value : '17';
+    // Get selected sizes
+    const selectedSizes = Array.from(
+        document.querySelectorAll(`input[name="talla-${producto}"]:checked`)
+    ).map(checkbox => checkbox.value);
+    
+    if (selectedSizes.length === 0) {
+        showNotification('Por favor seleccione al menos una talla');
+        return;
+    }
     
     if (!producto || !precio || !imagen) {
         console.error('Missing product data:', { producto, precio, imagen });
         return;
     }
     
-    const existingItem = cart.find(item => item.producto === producto && item.talla === talla);
-    
-    if (existingItem) {
-        existingItem.cantidad += 1;
-    } else {
-        cart.push({
-            producto,
-            precio,
-            imagen,
-            talla,
-            cantidad: 1
-        });
-    }
+    // Add each selected size as a separate item
+    selectedSizes.forEach(talla => {
+        const existingItem = cart.find(item => item.producto === producto && item.talla === talla);
+        
+        if (existingItem) {
+            existingItem.cantidad += 1;
+        } else {
+            cart.push({
+                producto,
+                precio,
+                imagen,
+                talla,
+                cantidad: 1
+            });
+        }
+    });
     
     updateCart();
-    showNotification('Producto agregado al carrito');
+    showNotification('Producto(s) agregado(s) al carrito');
 }
 
 window.updateCart = function() {
@@ -181,7 +190,7 @@ window.updateCart = function() {
             <div class="cart-item-info">
                 <h4>${item.producto}</h4>
                 <p>Talla: ${item.talla}</p>
-                <p>$${item.precio.toFixed(2)}</p>
+                <p>${formatPrice(item.precio)}</p>
             </div>
             <div class="cart-item-quantity">
                 <button type="button" onclick="updateQuantity(${index}, -1)">-</button>
@@ -193,7 +202,7 @@ window.updateCart = function() {
     
     // Update total
     const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    cartTotal.textContent = total.toFixed(2);
+    cartTotal.textContent = formatPrice(total);
 }
 
 window.updateQuantity = function(index, change) {
@@ -234,43 +243,54 @@ window.sendOrderToWhatsApp = function() {
         return;
     }
     
-    const phoneNumber = '573105822406'; // Your WhatsApp number
-    let message = '¡Nuevo pedido!\n\n';
+    const phoneNumber = '573105822406';
+    let message = 'NUEVO PEDIDO\n\n';
     
-    // Obtenemos la URL actual y nos aseguramos de que sea accesible
-    const currentUrl = window.location.href;
-    const productUrl = currentUrl.includes('localhost') 
-        ? 'http://[::1]:8000/index.html#productos'  // URL para desarrollo local
-        : currentUrl.split('#')[0] + '#productos';  // URL para producción
-    
-    // Primero enviamos el mensaje con los detalles del pedido
-    cart.forEach(item => {
-        message += `${item.producto}\n`;
+    // Detalles del pedido
+    cart.forEach((item, index) => {
+        message += `Producto ${index + 1}: ${item.producto}\n`;
         message += `Talla: ${item.talla}\n`;
         message += `Cantidad: ${item.cantidad}\n`;
-        message += `Precio unitario: $${item.precio.toFixed(2)}\n`;
-        message += `Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\n`;
-        message += `Ver producto: ${productUrl}\n\n`;
+        message += `Precio: ${formatPrice(item.precio)}\n`;
+        message += `Subtotal: ${formatPrice(item.precio * item.cantidad)}\n\n`;
     });
     
     const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    message += `Total: $${total.toFixed(2)}\n\n`;
+    message += `TOTAL: ${formatPrice(total)}\n\n`;
     
-    // Agregamos información de la tienda
-    message += 'Dirección de la tienda:\n';
-    message += 'Calle 10 No. 10-74 Barrio Palermo, Ipiales\n\n';
-    message += 'Horario de atención:\n';
-    message += 'Lunes a Viernes: 9:00 - 18:00\n';
-    message += 'Sábado: 9:00 - 14:00\n\n';
+    // Información de la tienda
+    message += 'INFORMACIÓN DE LA TIENDA\n';
+    message += 'Dirección: Calle 10 No. 10-74 Barrio Palermo, Ipiales\n';
+    message += 'Horario: Lunes a Viernes 9:00 - 18:00, Sábado 9:00 - 14:00\n';
+    message += 'WhatsApp: 310 582 2406';
     
-    message += 'Puede visitar nuestra tienda o ver el producto en nuestra página web usando el enlace proporcionado.';
-    
-    // Enviamos el mensaje de texto
+    // Crear y abrir el enlace de WhatsApp
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     
-    // Log para depuración
-    console.log('URL del producto:', productUrl);
+    // Limpiar el carrito después de enviar
+    cart = [];
+    updateCart();
+    showNotification('Pedido enviado exitosamente');
+}
+
+// Función para convertir imagen a base64
+function getBase64FromImageUrl(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL('image/jpeg');
+            resolve(dataURL);
+        };
+        img.onerror = reject;
+        img.src = url;
+    });
 }
 
 // Add notification styles
