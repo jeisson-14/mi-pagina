@@ -448,22 +448,75 @@ function updateHeroSection(settings) {
     }
 }
 
+// Función para cargar productos de ejemplo
+function loadSampleProducts() {
+    const sampleProducts = [
+        {
+            id: 1,
+            name: "Zapato Ortopédico Niño Azul",
+            category: "ninos",
+            description: "Zapato ortopédico para niño con soporte de arco y material transpirable",
+            price: 85000,
+            image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            sizes: ["17", "18", "19", "20", "serie"]
+        },
+        {
+            id: 2,
+            name: "Zapato Ortopédico Niño Negro",
+            category: "ninos",
+            description: "Zapato ortopédico para niño con suela antideslizante y ajuste perfecto",
+            price: 90000,
+            image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            sizes: ["17", "18", "19", "20", "serie"]
+        },
+        {
+            id: 3,
+            name: "Zapato Ortopédico Niña Rosa",
+            category: "ninas",
+            description: "Zapato ortopédico para niña con diseño elegante y cómodo",
+            price: 85000,
+            image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            sizes: ["17", "18", "19", "20", "serie"]
+        },
+        {
+            id: 4,
+            name: "Zapato Ortopédico Niña Blanco",
+            category: "ninas",
+            description: "Zapato ortopédico para niña con detalles en rosa y suela flexible",
+            price: 90000,
+            image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            sizes: ["17", "18", "19", "20", "serie"]
+        }
+    ];
+
+    // Guardar productos de ejemplo en localStorage
+    localStorage.setItem('products', JSON.stringify(sampleProducts));
+    return sampleProducts;
+}
+
 // Load hero settings on page load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Content Loaded');
     
+    // Cargar configuración del hero
     const heroSettings = JSON.parse(localStorage.getItem('heroSettings') || '{}');
     if (Object.keys(heroSettings).length > 0) {
         updateHeroSection(heroSettings);
     }
     
-    updateLoginButton();
-    
-    // Cargar productos para ambas categorías
-    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    // Verificar si hay productos en localStorage
+    let products = JSON.parse(localStorage.getItem('products') || '[]');
     console.log('Products loaded on page load:', products);
     
-    // Siempre intentar mostrar los productos, incluso si no hay ninguno
+    // Si no hay productos, cargar los de ejemplo
+    if (products.length === 0) {
+        console.log('No products found, loading sample products');
+        products = loadSampleProducts();
+    }
+    
+    // Mostrar productos en ambas categorías
     showCategoryProducts('ninos');
     showCategoryProducts('ninas');
+    
+    updateLoginButton();
 }); 
