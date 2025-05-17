@@ -102,47 +102,76 @@ function handleAddProduct(event) {
 
     const reader = new FileReader();
     reader.onload = function(e) {
-        const product = {
-            id: Date.now(), // Agregar ID único
-            name: document.getElementById('product-name').value,
-            category: document.getElementById('product-category').value,
-            description: document.getElementById('product-description').value,
-            price: document.getElementById('product-price').value,
-            image: e.target.result, // Store the image as base64
-            sizes: Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value)
-        };
+        try {
+            const product = {
+                id: Date.now(),
+                name: document.getElementById('product-name').value,
+                category: document.getElementById('product-category').value,
+                description: document.getElementById('product-description').value,
+                price: document.getElementById('product-price').value,
+                image: e.target.result,
+                sizes: Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value)
+            };
 
-        console.log('New product to add:', product);
+            console.log('New product to add:', product);
 
-        // Validate sizes
-        if (product.sizes.length === 0) {
-            alert('Por favor seleccione al menos una talla');
-            return;
+            // Validate sizes
+            if (product.sizes.length === 0) {
+                alert('Por favor seleccione al menos una talla');
+                return;
+            }
+
+            // If "Serie Completa" is selected, add all sizes
+            if (product.sizes.includes('serie')) {
+                product.sizes = ['17', '18', '19', '20', 'serie'];
+            }
+
+            // Get current products
+            let products = [];
+            try {
+                const storedProducts = localStorage.getItem('products');
+                if (storedProducts) {
+                    products = JSON.parse(storedProducts);
+                }
+            } catch (error) {
+                console.error('Error reading products from localStorage:', error);
+                alert('Error al leer los productos existentes');
+                return;
+            }
+
+            // Add new product
+            products.push(product);
+
+            // Try to save to localStorage
+            try {
+                localStorage.setItem('products', JSON.stringify(products));
+                console.log('Products saved successfully. Total products:', products.length);
+            } catch (error) {
+                console.error('Error saving to localStorage:', error);
+                if (error.name === 'QuotaExceededError') {
+                    alert('No se pueden almacenar más productos. El almacenamiento está lleno.');
+                } else {
+                    alert('Error al guardar el producto: ' + error.message);
+                }
+                return;
+            }
+
+            // Reset form and reload products
+            event.target.reset();
+            document.getElementById('image-preview').innerHTML = '';
+            document.getElementById('add-product-form').style.display = 'none';
+            
+            // Recargar productos en todas las vistas
+            loadProducts();
+            showCategoryProducts('ninos');
+            showCategoryProducts('ninas');
+            
+            // Show success message
+            alert('Producto agregado exitosamente');
+        } catch (error) {
+            console.error('Error in handleAddProduct:', error);
+            alert('Error al procesar el producto: ' + error.message);
         }
-
-        // If "Serie Completa" is selected, add all sizes
-        if (product.sizes.includes('serie')) {
-            product.sizes = ['17', '18', '19', '20', 'serie'];
-        }
-
-        // Store in localStorage
-        const products = JSON.parse(localStorage.getItem('products') || '[]');
-        products.push(product);
-        localStorage.setItem('products', JSON.stringify(products));
-        console.log('Products saved to localStorage:', products);
-
-        // Reset form and reload products
-        event.target.reset();
-        document.getElementById('image-preview').innerHTML = '';
-        document.getElementById('add-product-form').style.display = 'none';
-        
-        // Recargar productos en todas las vistas
-        loadProducts();
-        showCategoryProducts('ninos');
-        showCategoryProducts('ninas');
-        
-        // Show success message
-        alert('Producto agregado exitosamente');
     };
 
     reader.readAsDataURL(imageFile);

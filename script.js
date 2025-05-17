@@ -131,45 +131,33 @@ function addToCart(button) {
     
     const producto = button.dataset.producto;
     const precio = parseFloat(button.dataset.precio);
-    // Ajustar la ruta de la imagen para GitHub Pages
-    const imagen = button.dataset.imagen.startsWith('http') ? 
-        button.dataset.imagen : 
-        window.location.origin + '/tienda' + button.dataset.imagen;
+    const imagen = button.dataset.imagen;
     
-    // Get selected sizes
-    const selectedSizes = Array.from(
-        document.querySelectorAll(`input[name="talla-${producto}"]:checked`)
-    ).map(checkbox => checkbox.value);
-    
-    if (selectedSizes.length === 0) {
-        showNotification('Por favor seleccione al menos una talla');
-        return;
-    }
+    // Get selected size
+    const sizeSelect = button.parentElement.querySelector('.size-select');
+    const talla = sizeSelect ? sizeSelect.value : '17';
     
     if (!producto || !precio || !imagen) {
         console.error('Missing product data:', { producto, precio, imagen });
         return;
     }
     
-    // Add each selected size as a separate item
-    selectedSizes.forEach(talla => {
-        const existingItem = cart.find(item => item.producto === producto && item.talla === talla);
-        
-        if (existingItem) {
-            existingItem.cantidad += 1;
-        } else {
-            cart.push({
-                producto,
-                precio,
-                imagen,
-                talla,
-                cantidad: 1
-            });
-        }
-    });
+    const existingItem = cart.find(item => item.producto === producto && item.talla === talla);
+    
+    if (existingItem) {
+        existingItem.cantidad += 1;
+    } else {
+        cart.push({
+            producto,
+            precio,
+            imagen,
+            talla,
+            cantidad: 1
+        });
+    }
     
     updateCart();
-    showNotification('Producto(s) agregado(s) al carrito');
+    showNotification('Producto agregado al carrito');
 }
 
 window.updateCart = function() {
@@ -189,11 +177,11 @@ window.updateCart = function() {
     // Update cart items
     cartItems.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
-            <img src="${item.imagen}" alt="${item.producto}" onerror="this.src='https://via.placeholder.com/100x100?text=Imagen+No+Disponible'">
+            <img src="${item.imagen}" alt="${item.producto}">
             <div class="cart-item-info">
                 <h4>${item.producto}</h4>
                 <p>Talla: ${item.talla}</p>
-                <p>${formatPrice(item.precio)}</p>
+                <p>$${item.precio.toFixed(2)}</p>
             </div>
             <div class="cart-item-quantity">
                 <button type="button" onclick="updateQuantity(${index}, -1)">-</button>
@@ -205,7 +193,7 @@ window.updateCart = function() {
     
     // Update total
     const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    cartTotal.textContent = formatPrice(total);
+    cartTotal.textContent = total.toFixed(2);
 }
 
 window.updateQuantity = function(index, change) {
@@ -246,54 +234,43 @@ window.sendOrderToWhatsApp = function() {
         return;
     }
     
-    const phoneNumber = '573105822406';
-    let message = 'NUEVO PEDIDO\n\n';
+    const phoneNumber = '573105822406'; // Your WhatsApp number
+    let message = '¡Nuevo pedido!\n\n';
     
-    // Detalles del pedido
-    cart.forEach((item, index) => {
-        message += `Producto ${index + 1}: ${item.producto}\n`;
+    // Obtenemos la URL actual y nos aseguramos de que sea accesible
+    const currentUrl = window.location.href;
+    const productUrl = currentUrl.includes('localhost') 
+        ? 'http://[::1]:8000/index.html#productos'  // URL para desarrollo local
+        : currentUrl.split('#')[0] + '#productos';  // URL para producción
+    
+    // Primero enviamos el mensaje con los detalles del pedido
+    cart.forEach(item => {
+        message += `${item.producto}\n`;
         message += `Talla: ${item.talla}\n`;
         message += `Cantidad: ${item.cantidad}\n`;
-        message += `Precio: ${formatPrice(item.precio)}\n`;
-        message += `Subtotal: ${formatPrice(item.precio * item.cantidad)}\n\n`;
+        message += `Precio unitario: $${item.precio.toFixed(2)}\n`;
+        message += `Subtotal: $${(item.precio * item.cantidad).toFixed(2)}\n`;
+        message += `Ver producto: ${productUrl}\n\n`;
     });
     
     const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    message += `TOTAL: ${formatPrice(total)}\n\n`;
+    message += `Total: $${total.toFixed(2)}\n\n`;
     
-    // Información de la tienda
-    message += 'INFORMACIÓN DE LA TIENDA\n';
-    message += 'Dirección: Calle 10 No. 10-74 Barrio Palermo, Ipiales\n';
-    message += 'Horario: Lunes a Viernes 9:00 - 18:00, Sábado 9:00 - 14:00\n';
-    message += 'WhatsApp: 310 582 2406';
+    // Agregamos información de la tienda
+    message += 'Dirección de la tienda:\n';
+    message += 'Calle 10 No. 10-74 Barrio Palermo, Ipiales\n\n';
+    message += 'Horario de atención:\n';
+    message += 'Lunes a Viernes: 9:00 - 18:00\n';
+    message += 'Sábado: 9:00 - 14:00\n\n';
     
-    // Crear y abrir el enlace de WhatsApp
+    message += 'Puede visitar nuestra tienda o ver el producto en nuestra página web usando el enlace proporcionado.';
+    
+    // Enviamos el mensaje de texto
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
     
-    // Limpiar el carrito después de enviar
-    cart = [];
-    updateCart();
-    showNotification('Pedido enviado exitosamente');
-}
-
-// Función para convertir imagen a base64
-function getBase64FromImageUrl(url) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            const dataURL = canvas.toDataURL('image/jpeg');
-            resolve(dataURL);
-        };
-        img.onerror = reject;
-        img.src = url;
-    });
+    // Log para depuración
+    console.log('URL del producto:', productUrl);
 }
 
 // Add notification styles
@@ -337,111 +314,4 @@ style.textContent = `
         border-color: var(--color-primary);
     }
 `;
-document.head.appendChild(style);
-
-// Función para mostrar el formulario de edición de producto
-window.showEditProductForm = function(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    const form = document.getElementById('add-product-form');
-    form.style.display = 'block';
-
-    // Llenar el formulario con los datos del producto
-    document.getElementById('product-name').value = product.nombre;
-    document.getElementById('product-category').value = product.categoria;
-    document.getElementById('product-description').value = product.descripcion;
-    document.getElementById('product-price').value = product.precio;
-
-    // Marcar las tallas disponibles
-    const sizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
-    sizeCheckboxes.forEach(checkbox => {
-        checkbox.checked = product.tallas.includes(checkbox.value);
-    });
-
-    // Cambiar el botón de submit para editar
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.textContent = 'Actualizar Producto';
-    submitButton.onclick = (e) => {
-        e.preventDefault();
-        handleEditProduct(productId);
-    };
-}
-
-// Función para manejar la edición de producto
-window.handleEditProduct = function(productId) {
-    const nombre = document.getElementById('product-name').value;
-    const categoria = document.getElementById('product-category').value;
-    const descripcion = document.getElementById('product-description').value;
-    const precio = parseFloat(document.getElementById('product-price').value);
-    
-    // Obtener tallas seleccionadas
-    const tallas = Array.from(document.querySelectorAll('input[name="sizes"]:checked'))
-        .map(checkbox => checkbox.value);
-
-    if (!nombre || !categoria || !descripcion || !precio || tallas.length === 0) {
-        showNotification('Por favor complete todos los campos');
-        return;
-    }
-
-    // Encontrar el producto a editar
-    const productIndex = products.findIndex(p => p.id === productId);
-    if (productIndex === -1) {
-        showNotification('Producto no encontrado');
-        return;
-    }
-
-    // Actualizar el producto
-    products[productIndex] = {
-        ...products[productIndex],
-        nombre,
-        categoria,
-        descripcion,
-        precio,
-        tallas
-    };
-
-    // Guardar en localStorage
-    localStorage.setItem('products', JSON.stringify(products));
-
-    // Actualizar la vista
-    loadProducts();
-    showNotification('Producto actualizado exitosamente');
-
-    // Limpiar y ocultar el formulario
-    document.getElementById('add-product-form').reset();
-    document.getElementById('add-product-form').style.display = 'none';
-}
-
-// Función para eliminar producto
-window.deleteProduct = function(productId) {
-    if (confirm('¿Está seguro de que desea eliminar este producto?')) {
-        products = products.filter(p => p.id !== productId);
-        localStorage.setItem('products', JSON.stringify(products));
-        loadProducts();
-        showNotification('Producto eliminado exitosamente');
-    }
-}
-
-// Función para cargar productos en el panel de administración
-window.loadAdminProducts = function() {
-    const adminProductsGrid = document.getElementById('admin-products-grid');
-    if (!adminProductsGrid) return;
-
-    adminProductsGrid.innerHTML = products.map(product => `
-        <div class="producto-card">
-            <img src="${product.imagen}" alt="${product.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-            <h3>${product.nombre}</h3>
-            <p>${product.descripcion}</p>
-            <p class="precio">${formatPrice(product.precio)}</p>
-            <div class="admin-actions">
-                <button onclick="showEditProductForm('${product.id}')" class="edit-button">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-                <button onclick="deleteProduct('${product.id}')" class="delete-button">
-                    <i class="fas fa-trash"></i> Eliminar
-                </button>
-            </div>
-        </div>
-    `).join('');
-} 
+document.head.appendChild(style); 

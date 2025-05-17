@@ -11,8 +11,8 @@
     --color-dark: #2c3e50;
     --color-light: #f9f9f9;
     --color-white: #ffffff;
-    --section-padding: 3rem 0;
-    --container-width: 1200px;
+    --section-padding: 2rem 0;
+    --container-width: 1000px;
 }
 
 body {
@@ -34,7 +34,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: fixed;
     width: 100%;
-    top: 32px;
+    top: 24px;
     z-index: 1000;
 }
 
@@ -42,16 +42,16 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.5rem;
 }
 
 .logo h1 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.75rem;
     color: var(--color-dark);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     text-transform: uppercase;
     font-weight: 800;
     letter-spacing: 1px;
@@ -122,30 +122,30 @@ body {
     background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1514989940723-e8e51635b782?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
-    height: 50vh;
+    height: 40vh;
     display: flex;
     align-items: center;
     text-align: center;
     color: var(--color-white);
-    margin-top: 88px;
-    padding: 2rem 0;
+    margin-top: 72px;
+    padding: 1.5rem 0;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
     padding: 0 1rem;
 }
 
 .hero h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .hero p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
@@ -172,22 +172,22 @@ body {
 
 .categorias h2 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     color: var(--color-primary);
-    font-size: 2rem;
+    font-size: 1.75rem;
 }
 
 .categorias-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    max-width: 1000px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
     margin: 0 auto;
 }
 
 .categoria-card {
     background: var(--color-white);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
