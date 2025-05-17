@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="script.js" defer></script>
+    <script src="auth.js" defer></script>
 </head>
 <body>
     <!-- Top Banner -->
@@ -47,10 +48,32 @@
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#productos">Productos</a></li>
                     <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#" onclick="showLoginForm()" id="login-link"><i class="fas fa-user"></i> Admin</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeLoginModal()">&times;</span>
+            <div class="auth-container">
+                <h2>Iniciar Sesión</h2>
+                <form onsubmit="return handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Correo Electrónico</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section id="inicio" class="hero">
@@ -63,17 +86,86 @@
         </div>
     </section>
 
+    <!-- Product Management Section (Admin Only) -->
+    <section id="product-management" class="product-management" style="display: none;">
+        <div class="container">
+            <h2>Gestión de Productos</h2>
+            <div class="management-controls">
+                <button onclick="showAddProductForm()" class="management-button">
+                    <i class="fas fa-plus"></i> Agregar Producto
+                </button>
+            </div>
+
+            <div id="add-product-form" class="management-form" style="display: none;">
+                <h3>Agregar Nuevo Producto</h3>
+                <form onsubmit="return handleAddProduct(event)">
+                    <div class="form-group">
+                        <label for="product-name">Nombre del Producto</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-category">Categoría</label>
+                        <select id="product-category" required>
+                            <option value="ninos">Zapatos para Niños</option>
+                            <option value="ninas">Zapatos para Niñas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-description">Descripción</label>
+                        <textarea id="product-description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Precio</label>
+                        <input type="number" id="product-price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">URL de la Imagen</label>
+                        <input type="url" id="product-image" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tallas Disponibles</label>
+                        <div class="size-checkboxes">
+                            <label><input type="checkbox" name="sizes" value="17"> 17</label>
+                            <label><input type="checkbox" name="sizes" value="18"> 18</label>
+                            <label><input type="checkbox" name="sizes" value="19"> 19</label>
+                            <label><input type="checkbox" name="sizes" value="20"> 20</label>
+                            <label><input type="checkbox" name="sizes" value="serie"> Serie Completa (17-20)</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="management-button">Guardar Producto</button>
+                </form>
+            </div>
+
+            <div class="products-list">
+                <h3>Productos Existentes</h3>
+                <div id="admin-products-grid" class="productos-grid">
+                    <!-- Products will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Display Section -->
+    <section id="products-display" class="productos" style="display: none;">
+        <div class="container">
+            <h2 id="category-title">Productos</h2>
+            <div id="products-grid" class="productos-grid">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
     <!-- Categorías Section -->
     <section id="categorias" class="categorias">
         <div class="container">
             <h2>Nuestras Categorías</h2>
             <div class="categorias-grid">
-                <div class="categoria-card" onclick="openModal('modal-ninos')">
+                <div class="categoria-card" onclick="showCategoryProducts('ninos')">
                     <i class="fas fa-baby"></i>
                     <h3>Zapatos para Niños</h3>
                     <p>Calzado ortopédico especializado para bebés varones.</p>
                 </div>
-                <div class="categoria-card">
+                <div class="categoria-card" onclick="showCategoryProducts('ninas')">
                     <i class="fas fa-baby"></i>
                     <h3>Zapatos para Niñas</h3>
                     <p>Calzado ortopédico especializado para bebés niñas.</p>
@@ -123,54 +215,7 @@
             <div class="categoria-productos">
                 <h3 class="categoria-titulo"><i class="fas fa-child" style="color: #87ceeb;"></i> Zapatos para Niños</h3>
                 <div class="productos-grid">
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff" alt="Zapato ortopédico 1">
-                        <h3>Zapato Ortopédico Básico Niño</h3>
-                        <p class="descripcion">Zapato ortopédico con soporte de arco y material transpirable.</p>
-                        <p class="precio">$89.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Básico Niño" data-precio="89.99" data-imagen="https://images.unsplash.com/photo-1542291026-7eec264c27ff">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 2">
-                        <h3>Zapato Ortopédico Premium Niño</h3>
-                        <p class="descripcion">Zapato de alta calidad con suela antideslizante y ajuste perfecto.</p>
-                        <p class="precio">$129.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Premium Niño" data-precio="129.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 3">
-                        <h3>Zapato Ortopédico Deportivo Niño</h3>
-                        <p class="descripcion">Ideal para actividades físicas con máximo soporte.</p>
-                        <p class="precio">$99.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Deportivo Niño" data-precio="99.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
+                    <!-- Los productos se cargarán dinámicamente -->
                 </div>
             </div>
 
@@ -178,54 +223,7 @@
             <div class="categoria-productos">
                 <h3 class="categoria-titulo"><i class="fas fa-child" style="color: #ff69b4;"></i> Zapatos para Niñas</h3>
                 <div class="productos-grid">
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772" alt="Zapato ortopédico 6">
-                        <h3>Zapato Ortopédico Básico Niña</h3>
-                        <p class="descripcion">Diseño suave y cómodo para el día a día.</p>
-                        <p class="precio">$89.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Básico Niña" data-precio="89.99" data-imagen="https://images.unsplash.com/photo-1549298916-b41d501d3772">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2" alt="Zapato ortopédico 7">
-                        <h3>Zapato Ortopédico Premium Niña</h3>
-                        <p class="descripcion">Alta calidad con detalles especiales.</p>
-                        <p class="precio">$129.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Premium Niña" data-precio="129.99" data-imagen="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
-                    <div class="producto-card">
-                        <img src="https://images.unsplash.com/photo-1560343090-f0409e92791a" alt="Zapato ortopédico 8">
-                        <h3>Zapato Ortopédico Deportivo Niña</h3>
-                        <p class="descripcion">Perfecto para actividades físicas.</p>
-                        <p class="precio">$99.99</p>
-                        <select class="size-select">
-                            <option value="17">Talla 17</option>
-                            <option value="18">Talla 18</option>
-                            <option value="19">Talla 19</option>
-                            <option value="20">Talla 20</option>
-                            <option value="serie">Serie Completa (17-20)</option>
-                        </select>
-                        <button type="button" class="add-to-cart" data-producto="Zapato Ortopédico Deportivo Niña" data-precio="99.99" data-imagen="https://images.unsplash.com/photo-1560343090-f0409e92791a">
-                            <i class="fas fa-cart-plus"></i> Agregar al carrito
-                        </button>
-                    </div>
+                    <!-- Los productos se cargarán dinámicamente -->
                 </div>
             </div>
         </div>
