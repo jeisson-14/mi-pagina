@@ -276,7 +276,10 @@ function editProduct(index) {
     document.getElementById('product-category').value = product.category;
     document.getElementById('product-description').value = product.description;
     document.getElementById('product-price').value = product.price;
-    document.getElementById('product-image').value = product.image;
+    
+    // Mostrar la imagen actual
+    const preview = document.getElementById('image-preview');
+    preview.innerHTML = `<img src="${product.image}" alt="Preview" style="max-width: 200px; max-height: 200px;">`;
     
     // Check the appropriate size checkboxes
     document.querySelectorAll('input[name="sizes"]').forEach(checkbox => {
@@ -288,9 +291,69 @@ function editProduct(index) {
     form.style.display = 'block';
     form.scrollIntoView({ behavior: 'smooth' });
 
-    // Remove the old product
-    products.splice(index, 1);
+    // Cambiar el botón de submit para actualizar
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.textContent = 'Actualizar Producto';
+    
+    // Guardar el índice del producto que se está editando
+    form.dataset.editIndex = index;
+    
+    // Cambiar el manejador del formulario
+    form.onsubmit = function(event) {
+        event.preventDefault();
+        updateProduct(index);
+    };
+}
+
+// Función para actualizar el producto
+function updateProduct(index) {
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    const product = products[index];
+    
+    // Obtener los valores del formulario
+    const name = document.getElementById('product-name').value;
+    const category = document.getElementById('product-category').value;
+    const description = document.getElementById('product-description').value;
+    const price = parseFloat(document.getElementById('product-price').value);
+    const sizes = Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value);
+    
+    // Validar campos
+    if (!name || !category || !description || !price || sizes.length === 0) {
+        alert('Por favor complete todos los campos');
+        return;
+    }
+    
+    // Si "Serie Completa" está seleccionada, agregar todas las tallas
+    if (sizes.includes('serie')) {
+        sizes.splice(sizes.indexOf('serie'), 1);
+        sizes.push('17', '18', '19', '20', 'serie');
+    }
+    
+    // Actualizar el producto
+    products[index] = {
+        ...product,
+        name,
+        category,
+        description,
+        price,
+        sizes
+    };
+    
+    // Guardar en localStorage
     localStorage.setItem('products', JSON.stringify(products));
+    
+    // Resetear el formulario
+    document.getElementById('add-product-form').reset();
+    document.getElementById('add-product-form').style.display = 'none';
+    document.getElementById('image-preview').innerHTML = '';
+    
+    // Recargar productos
+    loadProducts();
+    showCategoryProducts('ninos');
+    showCategoryProducts('ninas');
+    
+    // Mostrar mensaje de éxito
+    alert('Producto actualizado exitosamente');
 }
 
 // Delete product

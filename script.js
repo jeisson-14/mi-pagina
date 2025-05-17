@@ -131,7 +131,10 @@ function addToCart(button) {
     
     const producto = button.dataset.producto;
     const precio = parseFloat(button.dataset.precio);
-    const imagen = button.dataset.imagen;
+    // Ajustar la ruta de la imagen para GitHub Pages
+    const imagen = button.dataset.imagen.startsWith('http') ? 
+        button.dataset.imagen : 
+        window.location.origin + '/tienda' + button.dataset.imagen;
     
     // Get selected sizes
     const selectedSizes = Array.from(
@@ -186,7 +189,7 @@ window.updateCart = function() {
     // Update cart items
     cartItems.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
-            <img src="${item.imagen}" alt="${item.producto}">
+            <img src="${item.imagen}" alt="${item.producto}" onerror="this.src='https://via.placeholder.com/100x100?text=Imagen+No+Disponible'">
             <div class="cart-item-info">
                 <h4>${item.producto}</h4>
                 <p>Talla: ${item.talla}</p>
@@ -334,4 +337,111 @@ style.textContent = `
         border-color: var(--color-primary);
     }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);
+
+// Función para mostrar el formulario de edición de producto
+window.showEditProductForm = function(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const form = document.getElementById('add-product-form');
+    form.style.display = 'block';
+
+    // Llenar el formulario con los datos del producto
+    document.getElementById('product-name').value = product.nombre;
+    document.getElementById('product-category').value = product.categoria;
+    document.getElementById('product-description').value = product.descripcion;
+    document.getElementById('product-price').value = product.precio;
+
+    // Marcar las tallas disponibles
+    const sizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
+    sizeCheckboxes.forEach(checkbox => {
+        checkbox.checked = product.tallas.includes(checkbox.value);
+    });
+
+    // Cambiar el botón de submit para editar
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.textContent = 'Actualizar Producto';
+    submitButton.onclick = (e) => {
+        e.preventDefault();
+        handleEditProduct(productId);
+    };
+}
+
+// Función para manejar la edición de producto
+window.handleEditProduct = function(productId) {
+    const nombre = document.getElementById('product-name').value;
+    const categoria = document.getElementById('product-category').value;
+    const descripcion = document.getElementById('product-description').value;
+    const precio = parseFloat(document.getElementById('product-price').value);
+    
+    // Obtener tallas seleccionadas
+    const tallas = Array.from(document.querySelectorAll('input[name="sizes"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    if (!nombre || !categoria || !descripcion || !precio || tallas.length === 0) {
+        showNotification('Por favor complete todos los campos');
+        return;
+    }
+
+    // Encontrar el producto a editar
+    const productIndex = products.findIndex(p => p.id === productId);
+    if (productIndex === -1) {
+        showNotification('Producto no encontrado');
+        return;
+    }
+
+    // Actualizar el producto
+    products[productIndex] = {
+        ...products[productIndex],
+        nombre,
+        categoria,
+        descripcion,
+        precio,
+        tallas
+    };
+
+    // Guardar en localStorage
+    localStorage.setItem('products', JSON.stringify(products));
+
+    // Actualizar la vista
+    loadProducts();
+    showNotification('Producto actualizado exitosamente');
+
+    // Limpiar y ocultar el formulario
+    document.getElementById('add-product-form').reset();
+    document.getElementById('add-product-form').style.display = 'none';
+}
+
+// Función para eliminar producto
+window.deleteProduct = function(productId) {
+    if (confirm('¿Está seguro de que desea eliminar este producto?')) {
+        products = products.filter(p => p.id !== productId);
+        localStorage.setItem('products', JSON.stringify(products));
+        loadProducts();
+        showNotification('Producto eliminado exitosamente');
+    }
+}
+
+// Función para cargar productos en el panel de administración
+window.loadAdminProducts = function() {
+    const adminProductsGrid = document.getElementById('admin-products-grid');
+    if (!adminProductsGrid) return;
+
+    adminProductsGrid.innerHTML = products.map(product => `
+        <div class="producto-card">
+            <img src="${product.imagen}" alt="${product.nombre}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+            <h3>${product.nombre}</h3>
+            <p>${product.descripcion}</p>
+            <p class="precio">${formatPrice(product.precio)}</p>
+            <div class="admin-actions">
+                <button onclick="showEditProductForm('${product.id}')" class="edit-button">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button onclick="deleteProduct('${product.id}')" class="delete-button">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    `).join('');
+} 
