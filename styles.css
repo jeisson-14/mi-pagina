@@ -11,18 +11,21 @@
     --color-dark: #2c3e50;
     --color-light: #f9f9f9;
     --color-white: #ffffff;
+    --section-padding: 3rem 0;
+    --container-width: 1200px;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--color-dark);
+    overflow-x: hidden;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--container-width);
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 1.5rem;
 }
 
 /* Header Styles */
@@ -31,7 +34,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: fixed;
     width: 100%;
-    top: 40px;
+    top: 32px;
     z-index: 1000;
 }
 
@@ -39,12 +42,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 1rem 1.5rem;
 }
 
 .logo h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--color-dark);
     display: flex;
     align-items: center;
@@ -119,27 +122,31 @@ body {
     background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1514989940723-e8e51635b782?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    height: 50vh;
     display: flex;
     align-items: center;
     text-align: center;
     color: var(--color-white);
-    margin-top: 120px;
+    margin-top: 88px;
+    padding: 2rem 0;
 }
 
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .hero h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .hero p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .cta-button {
@@ -159,27 +166,28 @@ body {
 
 /* Categorías Section */
 .categorias {
-    padding: 80px 0;
+    padding: var(--section-padding);
     background-color: var(--color-light);
 }
 
 .categorias h2 {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 2rem;
     color: var(--color-primary);
+    font-size: 2rem;
 }
 
 .categorias-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    max-width: 800px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
 .categoria-card {
     background: var(--color-white);
-    padding: 40px 30px;
+    padding: 2rem;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
@@ -246,19 +254,23 @@ body {
 
 /* Contacto Section */
 .contacto {
-    padding: 80px 0;
+    padding: var(--section-padding);
+    background-color: var(--color-white);
 }
 
 .contacto h2 {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 2rem;
     color: var(--color-primary);
+    font-size: 2rem;
 }
 
 .contacto-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .contacto-info {
@@ -366,14 +378,14 @@ body {
 .footer {
     background-color: var(--color-primary);
     color: var(--color-white);
-    padding: 50px 0 20px;
+    padding: 3rem 0 1rem;
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .footer-section h3 {
@@ -420,6 +432,11 @@ body {
     .main-nav a {
         display: block;
         padding: 10px;
+    }
+
+    .hero {
+        height: 50vh;
+        margin-top: 100px;
     }
 
     .hero h2 {
@@ -1195,4 +1212,37 @@ body {
     border-radius: 4px;
     font-size: 1rem;
     background-color: white;
+}
+
+/* Image upload styles */
+.image-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.image-preview img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #45a049;
 } 

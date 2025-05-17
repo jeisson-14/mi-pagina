@@ -94,6 +94,29 @@
                 <button onclick="showAddProductForm()" class="management-button">
                     <i class="fas fa-plus"></i> Agregar Producto
                 </button>
+                <button onclick="showHeroSettings()" class="management-button">
+                    <i class="fas fa-image"></i> Configurar Pantalla Principal
+                </button>
+            </div>
+
+            <div id="hero-settings" class="management-form" style="display: none;">
+                <h3>Configuración de la Pantalla Principal</h3>
+                <form onsubmit="return handleHeroSettings(event)">
+                    <div class="form-group">
+                        <label for="hero-title">Título Principal</label>
+                        <input type="text" id="hero-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-subtitle">Subtítulo</label>
+                        <input type="text" id="hero-subtitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hero-image">Imagen de Fondo</label>
+                        <input type="file" id="hero-image" accept="image/*">
+                        <div id="hero-image-preview" class="image-preview"></div>
+                    </div>
+                    <button type="submit" class="management-button">Guardar Cambios</button>
+                </form>
             </div>
 
             <div id="add-product-form" class="management-form" style="display: none;">
@@ -119,8 +142,9 @@
                         <input type="number" id="product-price" step="0.01" required>
                     </div>
                     <div class="form-group">
-                        <label for="product-image">URL de la Imagen</label>
-                        <input type="url" id="product-image" required>
+                        <label for="product-image">Imagen del Producto</label>
+                        <input type="file" id="product-image" accept="image/*" required>
+                        <div id="image-preview" class="image-preview"></div>
                     </div>
                     <div class="form-group">
                         <label>Tallas Disponibles</label>

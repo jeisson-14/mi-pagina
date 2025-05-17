@@ -75,43 +75,69 @@ function showAddProductForm() {
     form.querySelector('form').reset();
 }
 
+// Handle image preview
+document.getElementById('product-image').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        const preview = document.getElementById('image-preview');
+        
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 200px; max-height: 200px;">`;
+        }
+        
+        reader.readAsDataURL(file);
+    }
+});
+
 // Handle adding new product
 function handleAddProduct(event) {
     event.preventDefault();
     
-    const product = {
-        name: document.getElementById('product-name').value,
-        category: document.getElementById('product-category').value,
-        description: document.getElementById('product-description').value,
-        price: document.getElementById('product-price').value,
-        image: document.getElementById('product-image').value,
-        sizes: Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value)
-    };
-
-    // Validate sizes
-    if (product.sizes.length === 0) {
-        alert('Por favor seleccione al menos una talla');
+    const imageFile = document.getElementById('product-image').files[0];
+    if (!imageFile) {
+        alert('Por favor seleccione una imagen');
         return;
     }
 
-    // If "Serie Completa" is selected, add all sizes
-    if (product.sizes.includes('serie')) {
-        product.sizes = ['17', '18', '19', '20', 'serie'];
-    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const product = {
+            name: document.getElementById('product-name').value,
+            category: document.getElementById('product-category').value,
+            description: document.getElementById('product-description').value,
+            price: document.getElementById('product-price').value,
+            image: e.target.result, // Store the image as base64
+            sizes: Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value)
+        };
 
-    // Here you would typically make an API call to save the product
-    // For demo purposes, we'll store in localStorage
-    const products = JSON.parse(localStorage.getItem('products') || '[]');
-    products.push(product);
-    localStorage.setItem('products', JSON.stringify(products));
+        // Validate sizes
+        if (product.sizes.length === 0) {
+            alert('Por favor seleccione al menos una talla');
+            return;
+        }
 
-    // Reset form and reload products
-    event.target.reset();
-    document.getElementById('add-product-form').style.display = 'none';
-    loadProducts();
-    
-    // Show success message
-    alert('Producto agregado exitosamente');
+        // If "Serie Completa" is selected, add all sizes
+        if (product.sizes.includes('serie')) {
+            product.sizes = ['17', '18', '19', '20', 'serie'];
+        }
+
+        // Store in localStorage
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        products.push(product);
+        localStorage.setItem('products', JSON.stringify(products));
+
+        // Reset form and reload products
+        event.target.reset();
+        document.getElementById('image-preview').innerHTML = '';
+        document.getElementById('add-product-form').style.display = 'none';
+        loadProducts();
+        
+        // Show success message
+        alert('Producto agregado exitosamente');
+    };
+
+    reader.readAsDataURL(imageFile);
 }
 
 // Load products for admin view
@@ -223,8 +249,92 @@ function deleteProduct(index) {
     }
 }
 
-// Initialize products display on page load
+// Show hero settings form
+function showHeroSettings() {
+    const form = document.getElementById('hero-settings');
+    form.style.display = 'block';
+    form.scrollIntoView({ behavior: 'smooth' });
+    
+    // Load current settings
+    const heroSettings = JSON.parse(localStorage.getItem('heroSettings') || '{}');
+    document.getElementById('hero-title').value = heroSettings.title || 'Pequepies';
+    document.getElementById('hero-subtitle').value = heroSettings.subtitle || 'El calzado ortopédico ideal para tu bebé';
+    
+    // Show current image if exists
+    if (heroSettings.image) {
+        document.getElementById('hero-image-preview').innerHTML = 
+            `<img src="${heroSettings.image}" alt="Preview" style="max-width: 200px; max-height: 200px;">`;
+    }
+}
+
+// Handle hero image preview
+document.getElementById('hero-image').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        const preview = document.getElementById('hero-image-preview');
+        
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 200px; max-height: 200px;">`;
+        }
+        
+        reader.readAsDataURL(file);
+    }
+});
+
+// Handle hero settings form submission
+function handleHeroSettings(event) {
+    event.preventDefault();
+    
+    const heroImage = document.getElementById('hero-image').files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const heroSettings = {
+            title: document.getElementById('hero-title').value,
+            subtitle: document.getElementById('hero-subtitle').value,
+            image: heroImage ? e.target.result : JSON.parse(localStorage.getItem('heroSettings') || '{}').image
+        };
+        
+        // Save settings
+        localStorage.setItem('heroSettings', JSON.stringify(heroSettings));
+        
+        // Update hero section
+        updateHeroSection(heroSettings);
+        
+        // Hide form and show success message
+        document.getElementById('hero-settings').style.display = 'none';
+        alert('Configuración guardada exitosamente');
+    };
+    
+    if (heroImage) {
+        reader.readAsDataURL(heroImage);
+    } else {
+        reader.onload();
+    }
+}
+
+// Update hero section with new settings
+function updateHeroSection(settings) {
+    const heroContent = document.querySelector('.hero-content');
+    const heroSection = document.querySelector('.hero');
+    
+    // Update text content
+    heroContent.querySelector('h2').textContent = settings.title;
+    heroContent.querySelector('p').textContent = settings.subtitle;
+    
+    // Update background image if provided
+    if (settings.image) {
+        heroSection.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${settings.image}')`;
+    }
+}
+
+// Load hero settings on page load
 document.addEventListener('DOMContentLoaded', () => {
+    const heroSettings = JSON.parse(localStorage.getItem('heroSettings') || '{}');
+    if (Object.keys(heroSettings).length > 0) {
+        updateHeroSection(heroSettings);
+    }
     updateLoginButton();
     // Load products for both categories
     showCategoryProducts('ninos');
