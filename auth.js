@@ -199,72 +199,88 @@ function loadProducts() {
 // Show products by category
 function showCategoryProducts(category) {
     console.log('Showing products for category:', category);
-    const products = JSON.parse(localStorage.getItem('products') || '[]');
-    console.log('All products:', products);
-    const categoryProducts = products.filter(product => product.category === category);
-    console.log('Filtered products for category:', categoryProducts);
+    let products = [];
     
-    // Encontrar el contenedor correcto para la categoría
-    const categoryTitle = category === 'ninos' ? 'Niños' : 'Niñas';
-    const categoriaProductos = document.querySelectorAll('.categoria-productos');
-    let productsGrid = null;
-    
-    categoriaProductos.forEach(container => {
-        const title = container.querySelector('h3');
-        if (title && title.textContent.includes(categoryTitle)) {
-            productsGrid = container.querySelector('.productos-grid');
+    try {
+        const storedProducts = localStorage.getItem('products');
+        console.log('Stored products:', storedProducts);
+        
+        if (!storedProducts) {
+            console.log('No products in localStorage, loading samples...');
+            products = loadSampleProducts();
+        } else {
+            products = JSON.parse(storedProducts);
         }
-    });
-    
-    console.log('Products grid element:', productsGrid);
-    
-    if (!productsGrid) {
-        console.error('No se encontró el contenedor de productos para la categoría:', category);
-        return;
-    }
-    
-    // Limpiar y poblar el grid
-    productsGrid.innerHTML = '';
-    
-    if (categoryProducts.length === 0) {
-        console.log('No products found for category');
-        productsGrid.innerHTML = '<p class="no-products">No hay productos disponibles en esta categoría.</p>';
-        return;
-    }
+        
+        console.log('All products:', products);
+        const categoryProducts = products.filter(product => product.category === category);
+        console.log('Filtered products for category:', categoryProducts);
+        
+        // Encontrar el contenedor correcto para la categoría
+        const categoryTitle = category === 'ninos' ? 'Niños' : 'Niñas';
+        const categoriaProductos = document.querySelectorAll('.categoria-productos');
+        let productsGrid = null;
+        
+        categoriaProductos.forEach(container => {
+            const title = container.querySelector('h3');
+            if (title && title.textContent.includes(categoryTitle)) {
+                productsGrid = container.querySelector('.productos-grid');
+            }
+        });
+        
+        console.log('Products grid element:', productsGrid);
+        
+        if (!productsGrid) {
+            console.error('No se encontró el contenedor de productos para la categoría:', category);
+            return;
+        }
+        
+        // Limpiar y poblar el grid
+        productsGrid.innerHTML = '';
+        
+        if (categoryProducts.length === 0) {
+            console.log('No products found for category');
+            productsGrid.innerHTML = '<p class="no-products">No hay productos disponibles en esta categoría.</p>';
+            return;
+        }
 
-    categoryProducts.forEach(product => {
-        console.log('Creating product card for:', product.name);
-        const productCard = document.createElement('div');
-        productCard.className = 'producto-card';
-        productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
-            <h3>${product.name}</h3>
-            <p class="descripcion">${product.description}</p>
-            <p class="precio">${formatPrice(product.price)}</p>
-            <div class="tallas-disponibles">
-                <h4>Tallas Disponibles:</h4>
-                <div class="tallas-grid">
-                    ${['17', '18', '19', '20'].map(size => `
-                        <label class="talla-option">
-                            <input type="checkbox" name="talla-${product.name}" value="${size}">
-                            <span>${size}</span>
+        categoryProducts.forEach(product => {
+            console.log('Creating product card for:', product.name);
+            const productCard = document.createElement('div');
+            productCard.className = 'producto-card';
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/200x200?text=Imagen+No+Disponible'">
+                <h3>${product.name}</h3>
+                <p class="descripcion">${product.description}</p>
+                <p class="precio">${formatPrice(product.price)}</p>
+                <div class="tallas-disponibles">
+                    <h4>Tallas Disponibles:</h4>
+                    <div class="tallas-grid">
+                        ${['17', '18', '19', '20'].map(size => `
+                            <label class="talla-option">
+                                <input type="checkbox" name="talla-${product.name}" value="${size}">
+                                <span>${size}</span>
+                            </label>
+                        `).join('')}
+                        <label class="talla-option serie-completa">
+                            <input type="checkbox" name="talla-${product.name}" value="serie">
+                            <span>Serie Completa</span>
                         </label>
-                    `).join('')}
-                    <label class="talla-option serie-completa">
-                        <input type="checkbox" name="talla-${product.name}" value="serie">
-                        <span>Serie Completa</span>
-                    </label>
+                    </div>
                 </div>
-            </div>
-            <button type="button" class="add-to-cart" onclick="addToCart(this)" 
-                data-producto="${product.name}" 
-                data-precio="${product.price}" 
-                data-imagen="${product.image}">
-                <i class="fas fa-cart-plus"></i> Agregar al carrito
-            </button>
-        `;
-        productsGrid.appendChild(productCard);
-    });
+                <button type="button" class="add-to-cart" onclick="addToCart(this)" 
+                    data-producto="${product.name}" 
+                    data-precio="${product.price}" 
+                    data-imagen="${product.image}">
+                    <i class="fas fa-cart-plus"></i> Agregar al carrito
+                </button>
+            `;
+            productsGrid.appendChild(productCard);
+        });
+    } catch (error) {
+        console.error('Error showing category products:', error);
+        productsGrid.innerHTML = '<p class="error">Error al cargar los productos. Por favor, recarga la página.</p>';
+    }
 }
 
 // Edit product
@@ -450,6 +466,7 @@ function updateHeroSection(settings) {
 
 // Función para cargar productos de ejemplo
 function loadSampleProducts() {
+    console.log('Loading sample products...');
     const sampleProducts = [
         {
             id: 1,
@@ -489,9 +506,14 @@ function loadSampleProducts() {
         }
     ];
 
-    // Guardar productos de ejemplo en localStorage
-    localStorage.setItem('products', JSON.stringify(sampleProducts));
-    return sampleProducts;
+    try {
+        localStorage.setItem('products', JSON.stringify(sampleProducts));
+        console.log('Sample products saved to localStorage:', sampleProducts);
+        return sampleProducts;
+    } catch (error) {
+        console.error('Error saving sample products:', error);
+        return [];
+    }
 }
 
 // Load hero settings on page load
@@ -505,12 +527,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Verificar si hay productos en localStorage
-    let products = JSON.parse(localStorage.getItem('products') || '[]');
-    console.log('Products loaded on page load:', products);
-    
-    // Si no hay productos, cargar los de ejemplo
-    if (products.length === 0) {
-        console.log('No products found, loading sample products');
+    let products = [];
+    try {
+        const storedProducts = localStorage.getItem('products');
+        if (!storedProducts) {
+            console.log('No products found, loading sample products');
+            products = loadSampleProducts();
+        } else {
+            products = JSON.parse(storedProducts);
+        }
+        console.log('Products loaded on page load:', products);
+    } catch (error) {
+        console.error('Error loading products:', error);
         products = loadSampleProducts();
     }
     
